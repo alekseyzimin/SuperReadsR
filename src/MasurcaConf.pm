@@ -66,11 +66,6 @@ END
 PARAMETERS
 #this is k-mer size for deBruijn graph values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
 GRAPH_KMER_SIZE = auto
-#set this to 1 for all Illumina-only assemblies
-#set this to 1 if you have less than 20x long reads (454, Sanger, Pacbio) and less than 50x CLONE coverage by Illumina, Sanger or 454 mate pairs
-#otherwise keep at 0
-#minimum count k-mers used in error correction 1 means all k-mers are used.  one can increase to 2 if Illumina coverage >100
-KMER_COUNT_THRESHOLD = 1
 #auto-detected number of cpus to use
 NUM_THREADS = 16
 #this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*estimated_coverage

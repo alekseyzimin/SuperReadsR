@@ -30,8 +30,6 @@ use lib $RealBin;
 use MasurcaConf qw(fail $config_file);
 use MasurcaCommon qw($rerun_pe $rerun_sj $list_frg_files);
 use MasurcaSuperReads;
-use MasurcaCelera;
-use MasurcaSoap;
 use MasurcaPaths;
 
 #global variables
