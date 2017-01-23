@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([SuperReads], [0.3.2], [alekseyz@ipst.umd.edu], [SuperReads])
+AC_INIT([SuperReadsR], [0.3.2], [alekseyz@ipst.umd.edu], [SuperReadsR])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([subdir-objects])
 AM_SILENT_RULES([yes])

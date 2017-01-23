@@ -56,26 +56,15 @@ YAGGO_SOURCES = # Append all file to be built by yaggo
 ##############################
 # src pipeline
 ##############################
-bin_PROGRAMS += error_corrected2frg reverse_complement reduce_sr	\
+bin_PROGRAMS += reverse_complement reduce_sr	\
                 sorted_merge create_k_unitigs_large_k 			\
                 create_k_unitigs_large_k2 homo_trim bloom_query		\
-                filter_overlap_file rename_filter_fastq semaphore
+                rename_filter_fastq semaphore
 
 dist_bin_SCRIPTS += src/getNumBasesPerReadInFastaFile.perl		\
-                    src/create_end_pairs.pl src/close_gaps.sh		\
-                    src/compute_sr_cov.pl src/create_sr_frg.pl		\
-                    src2/compute_sr_cov.revisedForGCContig.pl		\
                     src/extractreads.pl src/extract_unjoined_pairs.pl	\
-                    src/fasta2frg.pl src/filter_library.sh		\
-                    src/fix_unitigs.sh					\
-                    src/recompute_astat_superreads.sh src/runSRCA.pl	\
-                    src/extractreads_not.pl src/run_ECR.sh		\
-                    src/filter_alt.pl					\
-                    src/rename_filter_fastq.pl				\
-                    src/filter_redundancy.pl src/expand_fastq		\
-                    src/sample_mate_pairs.pl src/fasta2frg_m.pl		\
-                    src/splitFileByPrefix.pl src/restore_ns.pl		\
-                    src/masurca-superreads
+                    src/extractreads_not.pl  				\
+                    src/expand_fastq src/createSuperReads_RNA
 
 noinst_HEADERS += src/aligned_simple_array.hpp				\
                   src/diskBasedUnitigger.h src/fibonacci_coding.hpp	\
@@ -85,11 +74,7 @@ noinst_HEADERS += src/aligned_simple_array.hpp				\
                   src/create_k_unitigs_common.hpp
 
 homo_trim_SOURCES = src/homo_trim.cc
-error_corrected2frg_SOURCES = src/error_corrected2frg.cc 
-YAGGO_SOURCES              += src/error_corrected2frg_cmdline.hpp
 reverse_complement_SOURCES = src/reverse_complement.cc
-#create_k_unitigs_SOURCES = src/create_k_unitigs.cpp
-#YAGGO_SOURCES           += src/create_k_unitigs_cmdline.hpp
 reduce_sr_SOURCES = src/reduce_sr.cc
 YAGGO_SOURCES    += src/reduce_sr_cmdline.hpp
 sorted_merge_SOURCES = src/sorted_merge.cc
@@ -100,8 +85,6 @@ create_k_unitigs_large_k2_SOURCES = src/create_k_unitigs_large_k2.cc
 YAGGO_SOURCES += src/create_k_unitigs_large_k2_cmdline.hpp
 bloom_query_SOURCES = src/bloom_query.cc src/MurmurHash3.cpp
 YAGGO_SOURCES += src/bloom_query_cmdline.hpp
-filter_overlap_file_SOURCES = src/filter_overlap_file.cc
-YAGGO_SOURCES += src/filter_overlap_file_cmdline.hpp
 rename_filter_fastq_SOURCES = src/rename_filter_fastq.cc
 YAGGO_SOURCES += src/rename_filter_fastq_cmdline.hpp
 
@@ -132,18 +115,14 @@ bin_PROGRAMS += createFastaSuperReadSequences				\
                 eliminateBadSuperReadsUsingList				\
                 getSuperReadInsertCountsFromReadPlacementFile		\
                 getSuperReadInsertCountsFromReadPlacementFileTwoPasses	\
-                joinKUnitigs_v3 outputRecordsNotOnList killBadKUnitigs \
-                makeAdjustmentFactorsForNumReadsForAStatBasedOnGC \
-                makeAdjustmentFactorsForNumReadsForAStatBasedOnGC_v2 \
+                joinKUnitigs_v3 outputRecordsNotOnList \
 		create_sr_frg splitFileAtNs
 
 dist_bin_SCRIPTS += src2/getLengthStatisticsForKUnitigsFile.perl	\
                     src2/createSuperReadsForDirectory.perl src2/add_missing_mates.pl \
                     src2/outputAlekseysJellyfishReductionFile.perl \
-                    src2/translateReduceFile.perl src/mergeSuperReadsUniquely.pl \
-	            src2/closeGapsInScaffFastaFile.perl
+                    src2/translateReduceFile.perl src/mergeSuperReadsUniquely.pl 
 
-killBadKUnitigs_SOURCES = src2/killBadKUnitigs.cc
 createFastaSuperReadSequences_SOURCES = src2/createFastaSuperReadSequences.cc
 
 findMatchesBetweenKUnitigsAndReads_SOURCES = src/read_parser.cc				\
@@ -171,65 +150,6 @@ splitFileAtNs_SOURCES = src2/splitFileAtNs.cc
 
 semaphore_SOURCES = src/semaphore.cc
 YAGGO_SOURCES += src/semaphore_cmdline.hpp
-
-##############################
-# GC bias programs
-##############################
-dist_bin_SCRIPTS += src2/getGCBiasStatistics.perl src2/getSuperReadPlacements.perl \
-	src2/getMeanAndStdevByGCCount.perl
-bin_PROGRAMS += getATBiasInCoverageForIllumina_v2
-getATBiasInCoverageForIllumina_v2_SOURCES = src2/getATBiasInCoverageForIllumina_v2.cc
-
-##############################
-# gap closing
-##############################
-dist_bin_SCRIPTS += src2/closeGaps.perl src2/getEndSequencesOfContigs.perl \
-                    src2/create_end_pairs.perl src2/outputJoinedPairs.perl \
-                    src2/getSequenceForClosedGaps.perl
-
-##############################
-# local gap closing
-##############################
-dist_bin_SCRIPTS += src2/closeGapsLocally.perl \
-	            src2/closeGaps.oneDirectory.perl \
-	            src2/getSequenceForLocallyClosedGaps.perl \
-                    src2/getMeanAndStdevForGapsByGapNumUsingCeleraTerminatorDirectory.perl \
-                    src2/createSuperReadSequenceAndPlacementFileFromCombined.perl \
-		    src2/getMeanAndStdevForGapsByGapNumUsingCeleraAsmFile.perl
-bin_PROGRAMS += collectReadSequencesForLocalGapClosing \
-	        runByDirectory
-collectReadSequencesForLocalGapClosing_SOURCES = src2/collectReadSequencesForLocalGapClosing.cc
-YAGGO_SOURCES += src2/collectReadSequencesForLocalGapClosing_cmdline.hpp
-runByDirectory_SOURCES = src2/runByDirectory.cc
-YAGGO_SOURCES += src2/runByDirectory_cmdline.hpp
-
-##############################
-# reversed jumping read library elimination
-##############################
-dist_bin_SCRIPTS += src2/reportReadsToExclude.perl src2/outputMatedReadsAsReverseComplement.perl \
-	src2/findReversePointingJumpingReads.perl src2/closeGaps.oneDirectory.fromMinKmerLen.perl \
-	src2/findReversePointingJumpingReads_bigGenomes.perl src2/extractJoinableAndNextPassReadsFromJoinKUnitigs.perl
-bin_PROGRAMS += putReadsIntoGroupsBasedOnSuperReads
-putReadsIntoGroupsBasedOnSuperReads_SOURCES = src2/putReadsIntoGroupsBasedOnSuperReads.cc
-YAGGO_SOURCES += src2/putReadsIntoGroupsBasedOnSuperReads_cmdline.hpp
-
-##############################
-# reversed jumping read library elimination
-##############################
-bin_PROGRAMS += extendSuperReadsForUniqueKmerNeighbors extendSuperReadsBasedOnUniqueExtensions
-extendSuperReadsForUniqueKmerNeighbors_SOURCES = src2/extendSuperReadsForUniqueKmerNeighbors.cc
-extendSuperReadsBasedOnUniqueExtensions_SOURCES = src2/extendSuperReadsBasedOnUniqueExtensions.cc
-YAGGO_SOURCES += src2/extendSuperReadsForUniqueKmerNeighbors_cmdline.hpp \
-	src2/extendSuperReadsBasedOnUniqueExtensions_cmdline.hpp
-##############################
-# Celera post-processing
-##############################
-bin_PROGRAMS += addSurrogatesToFrgCtgFile
-
-dist_bin_SCRIPTS += src2/addSurrogatesToFrgctg.perl src2/getUnitigTypeFromAsmFile.perl
-
-addSurrogatesToFrgCtgFile_SOURCES = src2/addSurrogatesToFrgCtgFile.cc
-
 
 ##############################
 # unittests
