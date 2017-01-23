@@ -95,8 +95,8 @@ bin_SCRIPTS += src/MasurcaPaths.pm
 CLEANFILES += src/MasurcaPaths.pm
 EXTRA_DIST += src/MasurcaPaths.pm.in
 dist_bin_SCRIPTS += src/MasurcaConf.pm		\
-                    src/MasurcaCommon.pm src/MasurcaCelera.pm	\
-                    src/MasurcaSoap.pm src/MasurcaSuperReads.pm
+                    src/MasurcaCommon.pm 	\
+                    src/MasurcaSuperReads.pm
 
 src/MasurcaPaths.pm: src/MasurcaPaths.pm.in Makefile
 	mkdir -p $(dir $@)

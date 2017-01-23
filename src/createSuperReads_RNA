@@ -301,7 +301,7 @@ if(not(-e "guillaumeKUnitigsAtLeast32bases_all.fasta")||$rerun_pe==1||$rerun_sj=
 ###done build k-unitigs###
 print FILE "\n";
 ###super-reads###
-  print FILE "createSuperReadsForDirectory.perl -low-memory -l \$KMER -mean-and-stdev-by-prefix-file meanAndStdevByPrefix.pe.txt -kunitigsfile guillaumeKUnitigsAtLeast32bases_all.fasta -t $config{NUM_THREADS} -mikedebug work1 pe.cor.fa 1> super1.err 2>&1\n";
+  print FILE "createSuperReadsForDirectory.perl -noreduce -low-memory -l \$KMER -mean-and-stdev-by-prefix-file meanAndStdevByPrefix.pe.txt -kunitigsfile guillaumeKUnitigsAtLeast32bases_all.fasta -t $config{NUM_THREADS} -mikedebug work1 pe.cor.fa 1> super1.err 2>&1\n";
   print FILE "if [[ ! -e work1/superReads.success ]];then\n";
   print FILE "fail Super reads failed, check super1.err and files in ./work1/\n";
   print FILE "fi\n";
