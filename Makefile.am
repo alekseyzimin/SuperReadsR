@@ -94,7 +94,7 @@ YAGGO_SOURCES += src/rename_filter_fastq_cmdline.hpp
 bin_SCRIPTS += src/MasurcaPaths.pm
 CLEANFILES += src/MasurcaPaths.pm
 EXTRA_DIST += src/MasurcaPaths.pm.in
-dist_bin_SCRIPTS += src/masurca src/MasurcaConf.pm		\
+dist_bin_SCRIPTS += src/MasurcaConf.pm		\
                     src/MasurcaCommon.pm src/MasurcaCelera.pm	\
                     src/MasurcaSoap.pm src/MasurcaSuperReads.pm
 
