@@ -6,8 +6,8 @@
 #include <map>
 #include <algorithm>
 
-#include "timer.h"
-#include "superread_index.hpp"
+#include <timer.h>
+#include <src/superread_index.hpp>
 
 #define BASE_WEIGHT 1.0
 

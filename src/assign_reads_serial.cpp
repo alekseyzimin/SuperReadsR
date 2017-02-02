@@ -4,7 +4,7 @@
 #include <vector>
 #include <fstream>
 
-#include "superread_index.hpp"
+#include <src/superread_index.hpp>
 
 #define QUEUE_SIZE 10000
 

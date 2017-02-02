@@ -56,7 +56,7 @@ YAGGO_SOURCES = # Append all file to be built by yaggo
 ##############################
 # src pipeline
 ##############################
-bin_PROGRAMS += reverse_complement assign_reads assign_reads_serial superread_index reduce_sr	\
+bin_PROGRAMS += reverse_complement assign_reads reduce_sr	\
                 sorted_merge create_k_unitigs_large_k 			\
                 create_k_unitigs_large_k2 homo_trim bloom_query		\
                 rename_filter_fastq semaphore
@@ -71,11 +71,9 @@ noinst_HEADERS += src/aligned_simple_array.hpp				\
                   src/sr_names.hpp src/bloom_filter.hpp			\
                   src/MurmurHash3.h src/bloom_hash.hpp			\
                   src/bloom_counter2.hpp src/read_parser.hpp		\
-                  src/create_k_unitigs_common.hpp
+                  src/create_k_unitigs_common.hpp src/superread_index.hpp
 
-assign_reads_SOURCES = src/assign_reads.cpp
-assign_reads_serial_SOURCES = src/assign_reads_serial.cpp
-superread_index_SOURCES = src/superread_index.cpp
+assign_reads_SOURCES = src/assign_reads.cpp src/superread_index.cpp
 homo_trim_SOURCES = src/homo_trim.cc
 reverse_complement_SOURCES = src/reverse_complement.cc
 reduce_sr_SOURCES = src/reduce_sr.cc
@@ -147,8 +145,6 @@ YAGGO_SOURCES += src2/getSuperReadInsertCountsFromReadPlacementFileTwoPasses_cmd
 joinKUnitigs_v3_SOURCES = src2/joinKUnitigs_v3.cc
 YAGGO_SOURCES          += src2/joinKUnitigs_v3_cmdline.hpp
 outputRecordsNotOnList_SOURCES = src2/outputRecordsNotOnList.cc
-makeAdjustmentFactorsForNumReadsForAStatBasedOnGC_SOURCES = src2/makeAdjustmentFactorsForNumReadsForAStatBasedOnGC.cc
-makeAdjustmentFactorsForNumReadsForAStatBasedOnGC_v2_SOURCES = src2/makeAdjustmentFactorsForNumReadsForAStatBasedOnGC_v2.cc
 splitFileAtNs_SOURCES = src2/splitFileAtNs.cc
 
 semaphore_SOURCES = src/semaphore.cc

@@ -216,6 +216,8 @@ print FILE "NUM_THREADS=$config{NUM_THREADS}\n";
 print FILE "save NUM_THREADS\n";
 ###renaming reads###
 
+
+
 @pe_files        = MasurcaCommon::rename_reads(*FILE, "pe", @{$config{PE_INFO}});
 print FILE "run_wait\n";
 $list_pe_files   = join(" ", @pe_files);
@@ -292,18 +294,33 @@ print FILE "\n";
 
 if(not(-e "guillaumeKUnitigsAtLeast32bases_all.fasta")||$rerun_pe==1||$rerun_sj==1){
     print FILE "log Creating k-unitigs with k=\$KMER\n";
-    print FILE "create_k_unitigs_large_k -q 1 -c \$((\$KMER-1)) -t $config{NUM_THREADS} -m \$KMER -n \$((\$ESTIMATED_GENOME_SIZE*2)) -l \$KMER -f `perl -e 'print 1/'\$KMER'/1e5'` $k_u_arg  | grep --text -v '^>' | perl -ane '{\$seq=\$F[0]; \$F[0]=~tr/ACTGactg/TGACtgac/;\$revseq=reverse(\$F[0]); \$h{(\$seq ge \$revseq)?\$seq:\$revseq}=1;}END{\$n=0;foreach \$k(keys \%h){print \">\",\$n++,\" length:\",length(\$k),\"\\n\$k\\n\"}}' > guillaumeKUnitigsAtLeast32bases_all.fasta.tmp && mv guillaumeKUnitigsAtLeast32bases_all.fasta.tmp guillaumeKUnitigsAtLeast32bases_all.fasta\n";
+    print FILE "create_k_unitigs_large_k2 -q 1 -c \$((\$KMER-1)) -t $config{NUM_THREADS} -m \$KMER -n \$((\$ESTIMATED_GENOME_SIZE*2)) -l \$KMER $k_u_arg  | grep --text -v '^>' | perl -ane '{\$seq=\$F[0]; \$F[0]=~tr/ACTGactg/TGACtgac/;\$revseq=reverse(\$F[0]); \$h{(\$seq ge \$revseq)?\$seq:\$revseq}=1;}END{\$n=0;foreach \$k(keys \%h){print \">\",\$n++,\" length:\",length(\$k),\"\\n\$k\\n\"}}' > guillaumeKUnitigsAtLeast32bases_all.fasta.tmp && mv guillaumeKUnitigsAtLeast32bases_all.fasta.tmp guillaumeKUnitigsAtLeast32bases_all.fasta\n";
     $rerun_pe=1;
 }
 
 ###done build k-unitigs###
 print FILE "\n";
 ###super-reads###
-  print FILE "createSuperReadsForDirectory.perl -noreduce -low-memory -l \$KMER -mean-and-stdev-by-prefix-file meanAndStdevByPrefix.pe.txt -kunitigsfile guillaumeKUnitigsAtLeast32bases_all.fasta -t $config{NUM_THREADS} -mikedebug work1 pe.cor.fa 1> super1.err 2>&1\n";
+  print FILE "createSuperReadsForDirectory.perl -low-memory -l \$KMER -mean-and-stdev-by-prefix-file meanAndStdevByPrefix.pe.txt -kunitigsfile guillaumeKUnitigsAtLeast32bases_all.fasta -t $config{NUM_THREADS} -mikedebug work1 pe.cor.fa 1> super1.err 2>&1\n";
   print FILE "if [[ ! -e work1/superReads.success ]];then\n";
   print FILE "fail Super reads failed, check super1.err and files in ./work1/\n";
   print FILE "fi\n";
-  print FILE "log 'All done, the super reads are in work1/superReadSequences.fasta'\n";
+  #print FILE "log 'All done, the super reads are in work1/superReadSequences.fasta'\n";
+
+print FILE "log 'Superreads generated, calculating weights'\n";
+
+###super-read quantification###
+print FILE "/scratch/groups/mschatz1/skovaka/stringtie_superreads/assign_reads"; # -o outdir, -p threads ?
+for my $ref (@{$config{PE_INFO}}) {
+    print FILE " \"${$ref}[0] ${$ref}[3]";
+    if (${$ref}[3] ne ${$ref}[4]) {
+        print FILE " ${$ref}[4]";
+    }
+    print FILE "\"";
+}
+print FILE "\n";
+
+
 
 script_done
 
