@@ -267,7 +267,7 @@ if(not(-e "pe.cor.fa")||$rerun_pe==1){
   print FILE <<"EOS";
 log Error correct PE.
 
-quorum_error_correct_reads  -q \$((MIN_Q_CHAR + $config{RELIABLE_Q_PARAM})) --contaminant=$RealBin/../share/adapter.jf -m $config{KMER_COUNT_THRESHOLD} -s 1 -g 1 -a 1 -t $config{NUM_THREADS} -w $WINDOW -e $MAX_ERR_PER_WINDOW $mmap_flag $homo_polymer_flag quorum_mer_db.jf $list_pe_files --no-discard -o pe.cor --verbose 1>quorum.err 2>&1 || {
+quorum_error_correct_reads  -q \$((\$MIN_Q_CHAR + $config{RELIABLE_Q_PARAM})) --contaminant=$RealBin/../share/adapter.jf -m $config{KMER_COUNT_THRESHOLD} -s 1 -g 1 -a 1 -t $config{NUM_THREADS} -w $WINDOW -e $MAX_ERR_PER_WINDOW $mmap_flag $homo_polymer_flag quorum_mer_db.jf $list_pe_files --no-discard -o pe.cor --verbose 1>quorum.err 2>&1 || {
   mv pe.cor.fa pe.cor.fa.failed && fail Error correction of PE reads failed. Check pe.cor.log.
 }
 EOS
@@ -301,7 +301,7 @@ if(not(-e "guillaumeKUnitigsAtLeast32bases_all.fasta")||$rerun_pe==1||$rerun_sj=
 ###done build k-unitigs###
 print FILE "\n";
 ###super-reads###
-  print FILE "createSuperReadsForDirectory.perl -low-memory -l \$KMER -mean-and-stdev-by-prefix-file meanAndStdevByPrefix.pe.txt -kunitigsfile guillaumeKUnitigsAtLeast32bases_all.fasta -t $config{NUM_THREADS} -mikedebug work1 pe.cor.fa 1> super1.err 2>&1\n";
+  print FILE "createSuperReadsForDirectory.perl -minreadsinsuperread 1 -low-memory -l \$KMER -mean-and-stdev-by-prefix-file meanAndStdevByPrefix.pe.txt -kunitigsfile guillaumeKUnitigsAtLeast32bases_all.fasta -t $config{NUM_THREADS} -mikedebug work1 pe.cor.fa 1> super1.err 2>&1\n";
   print FILE "if [[ ! -e work1/superReads.success ]];then\n";
   print FILE "fail Super reads failed, check super1.err and files in ./work1/\n";
   print FILE "fi\n";
